@@ -1,5 +1,1 @@
-export type Word = string;
-
-export type WordObject = {
-  letter: Number[];
-};
+export type WordObject = { [index: string]: number[] };
