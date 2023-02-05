@@ -3,7 +3,7 @@ const wordsRouter = Router();
 
 import { checkWord, getRandomWord } from "../services/wordsService";
 
-let word: string;
+let word = "";
 
 wordsRouter.get("/", (_, res) => {
   word = getRandomWord();
