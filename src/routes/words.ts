@@ -13,7 +13,7 @@ wordsRouter.get("/", (_, res) => {
 wordsRouter.post("/", (req, res) => {
   const { value } = req.body;
   const answer = checkWord(value);
-  res.json({ word, value, answer });
+  res.json({ value, answer });
 });
 
 export default wordsRouter;

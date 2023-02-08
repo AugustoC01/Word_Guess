@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev src/server.ts",
-    "test": "ts-node-dev src/utils/wordsUtils.ts",
+    "wordFormat": "ts-node-dev src/utils/wordsUtils.ts",
     "start": "node build/server.js",
     "tsc": "tsc"
   },

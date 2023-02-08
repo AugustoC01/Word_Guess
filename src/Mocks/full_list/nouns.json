@@ -1,6 +1,4 @@
-// import * as fs from "fs";
-
-const nouns = [
+[
   "amor",
   "café",
   "equipo",
@@ -171,37 +169,5 @@ const nouns = [
   "clientela",
   "fiesta",
   "sueño",
-  "auriculares",
-];
-
-// const removeAccents = (data: any) => {
-//   return data.map((str: any) =>
-//     str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-//   );
-// };
-// const nonAcc = removeAccents(nouns);
-
-// const upperCase = (data: any) => {
-//   return data.map((str: any) => str.toUpperCase());
-// };
-// const upper = upperCase(nonAcc);
-
-// const lengthFilter = (data: any, max: number) => {
-//   let filteredData = [];
-//   for (let i = 0; i < data.length; i++) {
-//     if (data[i].length == max) {
-//       filteredData.push(data[i]);
-//     }
-//   }
-//   return filteredData;
-// };
-// const length5 = lengthFilter(upper, 5);
-// console.log("length5.length::: ", length5.length);
-
-// const writeFile = (data: any, name: string) => {
-//   let dataSt = JSON.stringify(data);
-//   fs.writeFile(`./${name}.json`, dataSt, (err) => {
-//     console.log(err);
-//   });
-// };
-// writeFile(length5, "nouns5");
+  "auriculares"
+]

@@ -54,16 +54,19 @@ const limit = wordLetters.length < valueLetters.length
 for (let i = 0; i < word.length ; i++) {
     result[i] = -1;
 }
-
+let repeated = 0
 for (let i = 0; i < limit ; i++) {
     if (wordLetters.includes(valueLetters[i])) {
       valuePositions[i].forEach((index) => {
         if (wordObj[valueLetters[i]].some((value) => value == index)) {
           result[index] = 1;
         } else {
-            const quantity = wordObj[valueLetters[i]].length - valueLetters[i].length + 1
-            console.log("quantity", quantity)
-            for (let i = 0; i < quantity; i++) {
+            const quantity = wordObj[valueLetters[i]].length - valuePositions[i].length + 1
+            console.log(`wordObj[valueLetters[${i}]]`, wordObj[valueLetters[i]])
+            console.log(`valuePositions[${i}]`, valuePositions[i])
+            console.log('quantity: ', quantity)
+            if (quantity >= repeated) {
+              ++repeated
               result[index] = 0;
             }
         }
