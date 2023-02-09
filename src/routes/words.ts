@@ -1,7 +1,7 @@
 import { Router } from "express";
 const wordsRouter = Router();
 
-import { checkWord, getRandomWord } from "../services/wordsService";
+import { getRandomWord, getResult } from "../services/wordsService";
 
 let word = "";
 
@@ -12,7 +12,7 @@ wordsRouter.get("/", (_, res) => {
 
 wordsRouter.post("/", (req, res) => {
   const { value } = req.body;
-  const answer = checkWord(value);
+  const answer = getResult(value);
   res.json({ value, answer });
 });
 

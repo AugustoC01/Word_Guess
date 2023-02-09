@@ -1,2 +1,4 @@
 node_modules
 
+# all txt files
+*.txt

@@ -1,20 +1,23 @@
 import wordsList from "../Mocks/words.json";
 import alphabeth from "../Mocks/alphabet.json";
-import { WordObject } from "../types";
+import { WordObject, AlphabetObject } from "../types";
 
-let word = "";
-let wordObj: WordObject = {};
-let letters = alphabeth;
-// let attempts = 6;
+let wordObj: WordObject;
+let letters: AlphabetObject;
+let attempts: number;
 
 export const getRandomWord = (): string => {
   let i = Math.trunc(Math.random() * wordsList.length);
-  word = wordsList[i];
+  const word = wordsList[i];
   setWordData(word);
   return word;
 };
 
 const setWordData = (word: string) => {
+  //SET INITIAL DATA
+  letters = alphabeth;
+  attempts = 6;
+
   wordObj = {};
   const splitWord = [...word];
   let i = -1;
@@ -45,10 +48,44 @@ const setValueData = (value: string): WordObject => {
 
 const wordExists = (value: string): void => {
   const exists = wordsList.includes(value);
-  if (!exists) throw Error("Esa palabra no existe!");
+  if (!exists) throw Error("word");
 };
 
-export const checkWord = (value: string): number[] => {
+const setInitialResult = (max: number): number[] => {
+  let result: number[] = [];
+  for (let i = 0; i < max; i++) {
+    result[i] = -1;
+  }
+  return result;
+};
+
+const checkAttempts = () => {
+  if (attempts == 0) throw Error("attempts");
+  attempts = attempts - 1;
+};
+
+const setErrorResult = (e: string): number[] => {
+  let status: number = 0;
+  let result: number[] = [];
+  switch (e) {
+    case "word":
+      status = -2;
+      break;
+    case "attempts":
+      status = -3;
+      break;
+  }
+  result[0] = status;
+  return result;
+};
+
+// THIS IS BEING STORED IN MEMORY
+const setLetterValue = (x: string) => {
+  const i = letters.findIndex((obj) => x == obj.letter);
+  letters[i].status = -1;
+};
+
+const checkWord = (value: string): number[] => {
   let result: number[] = [];
   const valueObj = setValueData(value);
   const wordLetters = Object.keys(wordObj);
@@ -56,18 +93,8 @@ export const checkWord = (value: string): number[] => {
   const valueLetters = Object.keys(valueObj);
   const valuePositions = Object.values(valueObj);
 
-  try {
-    wordExists(value);
-  } catch (e) {
-    for (let i = 0; i < value.length; i++) {
-      result[i] = -2;
-    }
-    return result;
-  }
+  result = setInitialResult(value.length);
 
-  for (let i = 0; i < value.length; i++) {
-    result[i] = -1;
-  }
   const limit =
     wordLetters.length < valueLetters.length
       ? wordLetters.length
@@ -95,8 +122,12 @@ export const checkWord = (value: string): number[] => {
   return result;
 };
 
-// THIS IS BEING STORED IN MEMORY
-const setLetterValue = (x: string) => {
-  const i = letters.findIndex((obj) => x == obj.letter);
-  letters[i].status = -1;
+export const getResult = (value: string): number[] => {
+  try {
+    wordExists(value);
+    checkAttempts();
+    return checkWord(value);
+  } catch (e: any) {
+    return setErrorResult(e.message);
+  }
 };
