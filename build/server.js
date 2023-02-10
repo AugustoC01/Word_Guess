@@ -4,15 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const words_1 = __importDefault(require("./routes/words"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-const PORT = 8080;
-app.use(words_1.default);
-app.get("/saludo", (_, res) => {
-    console.log("Hola");
-    res.end("Hola");
-});
-app.listen(PORT, () => {
-    console.log("Server on http://localhost:8080");
+const routes_1 = __importDefault(require("./routes/routes"));
+(0, routes_1.default)(app);
+const config_1 = require("./config");
+app.listen(config_1.PORT, () => {
+    console.log(`Server on http://localhost:${config_1.PORT}`);
 });
