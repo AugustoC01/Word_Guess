@@ -16,7 +16,7 @@ export const getRandomWord = (): string => {
 const setWordData = (word: string) => {
   //SET INITIAL DATA
   letters = alphabeth;
-  attempts = 6;
+  attempts = 0;
 
   wordObj = {};
   const splitWord = [...word];
@@ -60,8 +60,8 @@ const setInitialResult = (max: number): number[] => {
 };
 
 const checkAttempts = () => {
-  if (attempts == 0) throw Error("attempts");
-  attempts = attempts - 1;
+  if (attempts == 5) throw Error("attempts");
+  attempts = attempts + 1;
 };
 
 const setErrorResult = (e: string): number[] => {
@@ -89,29 +89,28 @@ const checkWord = (value: string): number[] => {
   let result: number[] = [];
   const valueObj = setValueData(value);
   const wordLetters = Object.keys(wordObj);
-  // const wordPositions = Object.values(wordObj);
   const valueLetters = Object.keys(valueObj);
   const valuePositions = Object.values(valueObj);
 
   result = setInitialResult(value.length);
 
-  const limit =
-    wordLetters.length < valueLetters.length
-      ? wordLetters.length
-      : valueLetters.length;
-
-  let repeated = 0;
-  for (let i = 0; i < limit; i++) {
+  for (let i = 0; i < valueLetters.length; i++) {
+    let repeated = 0;
     if (wordLetters.includes(valueLetters[i])) {
       valuePositions[i].forEach((index) => {
         if (wordObj[valueLetters[i]].some((value) => value == index)) {
           result[index] = 1;
         } else {
-          const quantity =
-            wordObj[valueLetters[i]].length - valuePositions[i].length + 1;
-          if (quantity >= repeated) {
-            ++repeated;
-            result[index] = 0;
+          if (wordObj[valueLetters[i]].length > valuePositions[i].length) {
+            if (repeated < valuePositions[i].length) {
+              repeated = repeated + 1;
+              result[index] = 0;
+            }
+          } else {
+            if (repeated < wordObj[valueLetters[i]].length) {
+              repeated = repeated + 1;
+              result[index] = 0;
+            }
           }
         }
       });
@@ -122,12 +121,50 @@ const checkWord = (value: string): number[] => {
   return result;
 };
 
-export const getResult = (value: string): number[] => {
+export const getResult = (
+  value: string
+): { result: number[]; letters: AlphabetObject } => {
   try {
     wordExists(value);
     checkAttempts();
-    return checkWord(value);
+    const result = checkWord(value);
+    return { result, letters };
   } catch (e: any) {
-    return setErrorResult(e.message);
+    const result = setErrorResult(e.message);
+    return { result, letters };
+  }
+};
+
+export const testGetRandomWord = (word: string) => {
+  setWordData(word);
+};
+
+export const testGetResult = (
+  word: string,
+  value: string,
+  showData: boolean
+): { result: number[]; letters: AlphabetObject } => {
+  try {
+    if (word) {
+      testGetRandomWord(word);
+    } else {
+      getRandomWord();
+    }
+
+    wordExists(value);
+    checkAttempts();
+    const result = checkWord(value);
+
+    if (showData) {
+      console.log("word::: ", word);
+      console.log("wordObj::: ", wordObj);
+
+      console.log("value::: ", value);
+      console.log("ValueData::: ", setValueData(value));
+    }
+    return { result, letters };
+  } catch (e: any) {
+    const result = setErrorResult(e.message);
+    return { result, letters };
   }
 };
