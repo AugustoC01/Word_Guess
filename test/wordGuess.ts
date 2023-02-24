@@ -74,6 +74,47 @@ const checkWord = (value: string): number[] => {
   return result;
 };
 
+const chatGPT = (value: string): number[] => {
+  let result: number[] = [];
+  const valueObj = setValueData(value);
+  const wordLetters = Object.keys(wordObj);
+  const valueLetters = Object.keys(valueObj);
+  const valuePositions = Object.values(valueObj);
+
+  result = setInitialResult(value.length);
+  const checkRepeatedLetters = (
+    wordObj: WordObject,
+    valueLetters: string[],
+    result: number[],
+    repeated: number
+  ) => {
+    valueLetters.forEach((letter, i) => {
+      if (wordLetters.includes(letter)) {
+        valuePositions[i].forEach((index) => {
+          if (wordObj[letter].some((value) => value == index)) {
+            result[index] = 1;
+          } else {
+            if (
+              repeated <
+              Math.max(valuePositions[i].length, wordObj[letter].length)
+            ) {
+              repeated = repeated + 1;
+              result[index] = 0;
+            }
+          }
+        });
+      }
+    });
+    return repeated;
+  };
+
+  for (let i = 0; i < valueLetters.length; i++) {
+    let repeated = 0;
+    repeated = checkRepeatedLetters(wordObj, valueLetters, result, repeated);
+  }
+  return result;
+};
+
 export const testGetRandomWord = (word: string) => {
   setWordData(word);
 };
@@ -82,7 +123,8 @@ const testGetResult = (word: string, value: string, showData: boolean) => {
   if (word) {
     testGetRandomWord(word);
   }
-  const result = checkWord(value);
+  const result = chatGPT(value);
+  checkWord(value);
   if (showData) {
     console.log("word::: ", word);
     console.log("wordObj::: ", wordObj);

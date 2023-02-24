@@ -7,7 +7,7 @@
     "dev": "ts-node-dev src/server.ts",
     "wordFormat": "ts-node-dev src/utils/wordsUtils.ts",
     "wordGuess": "ts-node-dev test/wordGuess.ts",
-    "start": "node build/server.js",
+    "start": "node build/src/server.js",
     "tsc": "tsc"
   },
   "keywords": [],
