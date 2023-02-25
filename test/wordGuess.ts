@@ -119,7 +119,11 @@ export const testGetRandomWord = (word: string) => {
   setWordData(word);
 };
 
-const testGetResult = (word: string, value: string, showData: boolean) => {
+export const testGetResult = (
+  word: string,
+  value: string,
+  showData: boolean
+) => {
   if (word) {
     testGetRandomWord(word);
   }
@@ -134,6 +138,3 @@ const testGetResult = (word: string, value: string, showData: boolean) => {
   }
   return result;
 };
-
-const result = testGetResult("PERRO", "PODER", true);
-console.log("result::: ", result);

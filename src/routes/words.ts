@@ -3,9 +3,8 @@ const wordsRouter = Router();
 
 import {
   getRandomWord,
-  // getResult,
-  // getResult,
-  testGetResult,
+  getResult,
+  // testGetResult,
 } from "../services/wordsService";
 
 // let word = "";
@@ -15,9 +14,9 @@ wordsRouter.get("/", (_, res) => {
   res.json(word);
 });
 
-wordsRouter.post("/", (_req, res) => {
-  // const { value } = req.body;
-  const result = testGetResult("PERRO", "PODER", true);
+wordsRouter.post("/", (req, res) => {
+  const { value } = req.body;
+  const result = getResult(value);
   res.json(result);
 });
 
