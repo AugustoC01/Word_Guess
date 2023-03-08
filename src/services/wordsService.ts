@@ -1,10 +1,11 @@
 import wordsList from "../Mocks/words.json";
 import alphabeth from "../Mocks/alphabet.json";
-import { WordObject, AlphabetObject } from "../types";
+import { LetterPositions, AlphabetObject } from "../types";
 
-let wordObj: WordObject;
+let wordObj: LetterPositions;
 let letters: AlphabetObject;
-let attempts: number;
+let attemptCount: number;
+let wordLetters: string[];
 
 export const getRandomWord = (): string => {
   let i = Math.trunc(Math.random() * wordsList.length);
@@ -14,9 +15,8 @@ export const getRandomWord = (): string => {
 };
 
 const setWordData = (word: string) => {
-  //SET INITIAL DATA
   letters = alphabeth;
-  attempts = 0;
+  attemptCount = 0;
 
   wordObj = {};
   const splitWord = [...word];
@@ -29,11 +29,12 @@ const setWordData = (word: string) => {
       wordObj[letter].push(i);
     }
   });
+  wordLetters = Object.keys(wordObj);
 };
 
-const setValueData = (value: string): WordObject => {
+const getLetterPositions = (value: string): LetterPositions => {
   const splitValue = [...value];
-  let valueObj: WordObject = {};
+  let valueObj: LetterPositions = {};
   let i = -1;
   splitValue.forEach((letter) => {
     i++;
@@ -51,63 +52,57 @@ const wordExists = (value: string): void => {
   if (!exists) throw Error("word");
 };
 
-const setInitialResult = (max: number): number[] => {
-  let result: number[] = [];
-  for (let i = 0; i < max; i++) {
-    result[i] = -1;
-  }
-  return result;
-};
-
 const checkAttempts = () => {
-  if (attempts == 5) throw Error("attempts");
-  attempts = attempts + 1;
+  if (attemptCount == 5) throw Error("attempts");
+  attemptCount = attemptCount + 1;
 };
 
-const setErrorResult = (e: string): number[] => {
-  let status: number = 0;
-  let result: number[] = [];
-  switch (e) {
+const setErrorResult = (errorName: string, value: string): number[] => {
+  let errorCode: number = 0;
+  switch (errorName) {
     case "word":
-      status = -2;
+      errorCode = -2;
       break;
     case "attempts":
-      status = -3;
+      errorCode = -3;
       break;
   }
-  result[0] = status;
+  const result: number[] = Array.from(
+    { length: value.length },
+    () => errorCode
+  );
   return result;
 };
 
-// THIS IS BEING STORED IN MEMORY
 const setLetterValue = (x: string) => {
   const i = letters.findIndex((obj) => x == obj.letter);
   letters[i].status = -1;
 };
 
-const checkWord = (value: string): number[] => {
-  let result: number[] = [];
-  const valueObj = setValueData(value);
-  const wordLetters = Object.keys(wordObj);
+const compareWords = (value: string): number[] => {
+  const valueObj = getLetterPositions(value);
   const valueLetters = Object.keys(valueObj);
   const valuePositions = Object.values(valueObj);
 
-  result = setInitialResult(value.length);
+  const result = new Array(value.length).fill(-1);
 
   for (let i = 0; i < valueLetters.length; i++) {
+    let letter = valueLetters[i];
+    let letterPositions = valuePositions[i];
     let repeated = 0;
-    if (wordLetters.includes(valueLetters[i])) {
-      valuePositions[i].forEach((index) => {
-        if (wordObj[valueLetters[i]].some((value) => value == index)) {
+
+    if (wordLetters.includes(letter)) {
+      letterPositions.forEach((index) => {
+        if (wordObj[letter].some((value) => value == index)) {
           result[index] = 1;
         } else {
-          if (wordObj[valueLetters[i]].length > valuePositions[i].length) {
-            if (repeated < valuePositions[i].length) {
+          if (wordObj[letter].length > letterPositions.length) {
+            if (repeated < letterPositions.length) {
               repeated = repeated + 1;
               result[index] = 0;
             }
           } else {
-            if (repeated < wordObj[valueLetters[i]].length) {
+            if (repeated < wordObj[letter].length) {
               repeated = repeated + 1;
               result[index] = 0;
             }
@@ -115,7 +110,7 @@ const checkWord = (value: string): number[] => {
         }
       });
     } else {
-      setLetterValue(valueLetters[i]);
+      setLetterValue(letter);
     }
   }
   return result;
@@ -127,14 +122,15 @@ export const getResult = (
   try {
     wordExists(value);
     checkAttempts();
-    const result = checkWord(value);
+    const result = compareWords(value);
     return { result, letters };
   } catch (e: any) {
-    const result = setErrorResult(e.message);
+    const result = setErrorResult(e.message, value);
     return { result, letters };
   }
 };
 
+/* FUNCTIONS TO TEST COMPARE WORDS 
 export const testGetRandomWord = (word: string) => {
   setWordData(word);
 };
@@ -153,18 +149,18 @@ export const testGetResult = (
 
     wordExists(value);
     checkAttempts();
-    const result = checkWord(value);
+    const result = compareWords(value);
 
     if (showData) {
       console.log("word::: ", word);
       console.log("wordObj::: ", wordObj);
 
       console.log("value::: ", value);
-      console.log("ValueData::: ", setValueData(value));
+      console.log("ValueData::: ", getLetterPositions(value));
     }
     return { result, letters };
   } catch (e: any) {
-    const result = setErrorResult(e.message);
+    const result = setErrorResult(e.message, value);
     return { result, letters };
   }
-};
+}; */

@@ -1,140 +1,142 @@
-import { WordObject } from "../src/types";
+// import wordsList from "../src/Mocks/words.json";
+// import alphabeth from "../src/Mocks/alphabet.json";
+// import { LetterPositions, AlphabetObject } from "../src/types";
 
-let wordObj: WordObject;
+// let wordObj: LetterPositions;
 
-const setWordData = (word: string) => {
-  //SET INITIAL DATA
-  wordObj = {};
-  const splitWord = [...word];
-  let i = -1;
-  splitWord.forEach((letter) => {
-    i++;
-    if (!Object.keys(wordObj).includes(letter)) {
-      wordObj[letter] = [i];
-    } else {
-      wordObj[letter].push(i);
-    }
-  });
-};
+// const setWordData = (word: string) => {
+//   //SET INITIAL DATA
+//   wordObj = {};
+//   const splitWord = [...word];
+//   let i = -1;
+//   splitWord.forEach((letter) => {
+//     i++;
+//     if (!Object.keys(wordObj).includes(letter)) {
+//       wordObj[letter] = [i];
+//     } else {
+//       wordObj[letter].push(i);
+//     }
+//   });
+// };
 
-const setValueData = (value: string): WordObject => {
-  const splitValue = [...value];
-  let valueObj: WordObject = {};
-  let i = -1;
-  splitValue.forEach((letter) => {
-    i++;
-    if (!Object.keys(valueObj).includes(letter)) {
-      valueObj[letter] = [i];
-    } else {
-      valueObj[letter].push(i);
-    }
-  });
-  return valueObj;
-};
+// const setValueData = (value: string): LetterPositions => {
+//   const splitValue = [...value];
+//   let valueObj: LetterPositions = {};
+//   let i = -1;
+//   splitValue.forEach((letter) => {
+//     i++;
+//     if (!Object.keys(valueObj).includes(letter)) {
+//       valueObj[letter] = [i];
+//     } else {
+//       valueObj[letter].push(i);
+//     }
+//   });
+//   return valueObj;
+// };
 
-const setInitialResult = (max: number): number[] => {
-  let result: number[] = [];
-  for (let i = 0; i < max; i++) {
-    result[i] = -1;
-  }
-  return result;
-};
+// const setInitialResult = (max: number): number[] => {
+//   let result: number[] = [];
+//   for (let i = 0; i < max; i++) {
+//     result[i] = -1;
+//   }
+//   return result;
+// };
 
-const checkWord = (value: string): number[] => {
-  let result: number[] = [];
-  const valueObj = setValueData(value);
-  const wordLetters = Object.keys(wordObj);
-  const valueLetters = Object.keys(valueObj);
-  const valuePositions = Object.values(valueObj);
+// const checkWord = (value: string): number[] => {
+//   let result: number[] = [];
+//   const valueObj = setValueData(value);
+//   const wordLetters = Object.keys(wordObj);
+//   const valueLetters = Object.keys(valueObj);
+//   const valuePositions = Object.values(valueObj);
 
-  result = setInitialResult(value.length);
+//   result = setInitialResult(value.length);
 
-  for (let i = 0; i < valueLetters.length; i++) {
-    let repeated = 0;
-    if (wordLetters.includes(valueLetters[i])) {
-      valuePositions[i].forEach((index) => {
-        if (wordObj[valueLetters[i]].some((value) => value == index)) {
-          result[index] = 1;
-        } else {
-          if (wordObj[valueLetters[i]].length > valuePositions[i].length) {
-            if (repeated < valuePositions[i].length) {
-              repeated = repeated + 1;
-              result[index] = 0;
-            }
-          } else {
-            if (repeated < wordObj[valueLetters[i]].length) {
-              repeated = repeated + 1;
-              result[index] = 0;
-            }
-          }
-        }
-      });
-    }
-  }
-  return result;
-};
+//   for (let i = 0; i < valueLetters.length; i++) {
+//     let repeated = 0;
+//     if (wordLetters.includes(valueLetters[i])) {
+//       valuePositions[i].forEach((index) => {
+//         if (wordObj[valueLetters[i]].some((value) => value == index)) {
+//           result[index] = 1;
+//         } else {
+//           if (wordObj[valueLetters[i]].length > valuePositions[i].length) {
+//             if (repeated < valuePositions[i].length) {
+//               repeated = repeated + 1;
+//               result[index] = 0;
+//             }
+//           } else {
+//             if (repeated < wordObj[valueLetters[i]].length) {
+//               repeated = repeated + 1;
+//               result[index] = 0;
+//             }
+//           }
+//         }
+//       });
+//     }
+//   }
+//   return result;
+// };
 
-const chatGPT = (value: string): number[] => {
-  let result: number[] = [];
-  const valueObj = setValueData(value);
-  const wordLetters = Object.keys(wordObj);
-  const valueLetters = Object.keys(valueObj);
-  const valuePositions = Object.values(valueObj);
+// const chatGPT = (value: string): number[] => {
+//   let result: number[] = [];
+//   const valueObj = setValueData(value);
+//   const wordLetters = Object.keys(wordObj);
+//   const valueLetters = Object.keys(valueObj);
+//   const valuePositions = Object.values(valueObj);
 
-  result = setInitialResult(value.length);
-  const checkRepeatedLetters = (
-    wordObj: WordObject,
-    valueLetters: string[],
-    result: number[],
-    repeated: number
-  ) => {
-    valueLetters.forEach((letter, i) => {
-      if (wordLetters.includes(letter)) {
-        valuePositions[i].forEach((index) => {
-          if (wordObj[letter].some((value) => value == index)) {
-            result[index] = 1;
-          } else {
-            if (
-              repeated <
-              Math.max(valuePositions[i].length, wordObj[letter].length)
-            ) {
-              repeated = repeated + 1;
-              result[index] = 0;
-            }
-          }
-        });
-      }
-    });
-    return repeated;
-  };
+//   result = setInitialResult(value.length);
+//   const checkRepeatedLetters = (
+//     wordObj: LetterPositions,
+//     valueLetters: string[],
+//     result: number[],
+//     repeated: number
+//   ) => {
+//     valueLetters.forEach((letter, i) => {
+//       if (wordLetters.includes(letter)) {
+//         valuePositions[i].forEach((index) => {
+//           if (wordObj[letter].some((value) => value == index)) {
+//             result[index] = 1;
+//           } else {
+//             if (
+//               repeated <
+//               Math.max(valuePositions[i].length, wordObj[letter].length)
+//             ) {
+//               repeated = repeated + 1;
+//               result[index] = 0;
+//             }
+//           }
+//         });
+//       }
+//     });
+//     return repeated;
+//   };
 
-  for (let i = 0; i < valueLetters.length; i++) {
-    let repeated = 0;
-    repeated = checkRepeatedLetters(wordObj, valueLetters, result, repeated);
-  }
-  return result;
-};
+//   for (let i = 0; i < valueLetters.length; i++) {
+//     let repeated = 0;
+//     repeated = checkRepeatedLetters(wordObj, valueLetters, result, repeated);
+//   }
+//   return result;
+// };
 
-export const testGetRandomWord = (word: string) => {
-  setWordData(word);
-};
+// export const testGetRandomWord = (word: string) => {
+//   setWordData(word);
+// };
 
-export const testGetResult = (
-  word: string,
-  value: string,
-  showData: boolean
-) => {
-  if (word) {
-    testGetRandomWord(word);
-  }
-  const result = chatGPT(value);
-  checkWord(value);
-  if (showData) {
-    console.log("word::: ", word);
-    console.log("wordObj::: ", wordObj);
+// export const testGetResult = (
+//   word: string,
+//   value: string,
+//   showData: boolean
+// ) => {
+//   if (word) {
+//     testGetRandomWord(word);
+//   }
+//   const result = chatGPT(value);
+//   checkWord(value);
+//   if (showData) {
+//     console.log("word::: ", word);
+//     console.log("wordObj::: ", wordObj);
 
-    console.log("value::: ", value);
-    console.log("ValueData::: ", setValueData(value));
-  }
-  return result;
-};
+//     console.log("value::: ", value);
+//     console.log("ValueData::: ", setValueData(value));
+//   }
+//   return result;
+// };

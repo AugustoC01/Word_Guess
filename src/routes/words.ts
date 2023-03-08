@@ -1,11 +1,7 @@
 import { Router } from "express";
 const wordsRouter = Router();
 
-import {
-  getRandomWord,
-  getResult,
-  // testGetResult,
-} from "../services/wordsService";
+import { getRandomWord, getResult } from "../services/wordsService";
 
 // let word = "";
 
